@@ -58,22 +58,22 @@ function getTable(config) {
 		function factory(temp) {
 			return new Promise((resolve, reject) => {
 				request(utils.image_options(temp[property[0]]), (error, response, body) => {
-                    if (error || response.statusCode !== 200) {
+					if (error || response.statusCode !== 200) {
 						reject(error);
 						return;
 					}
-                    console.log("Success", temp);
+					console.log("Success", temp);
 
-                    const $ = cheerio.load(body, {
+					const $ = cheerio.load(body, {
 						decodeEntities: false
 					}); //防止i - shift === 2触发两次的问题
 
-                    const table = $("form").find("table.standardTable");
-                    const tbody = table.find("tbody");
-                    let shift = 0;
+					const table = $("form").find("table.standardTable");
+					const tbody = table.find("tbody");
+					let shift = 0;
 					let flag = false;
 					const data = [];
-                    for (let i = 0; i < tbody.find("tr").length; i++) {
+					for (let i = 0; i < tbody.find("tr").length; i++) {
 						if (tbody.find("tr").eq(i).find("td").eq(0).text() === "离开地影") { //Exits shadow
 							temp[property[3]][events[5]] = {};
 							current = temp[property[3]][events[5]];
@@ -97,24 +97,24 @@ function getTable(config) {
 							data[3] = parseInt(current[attribute[1]].split("°")[0]);
 						}
 					}
-                    const startTime = utils.getTimestamp(temp[property[3]][events[5]] ? temp[property[3]][events[5]][attribute[0]] : temp[property[3]][events[1]][attribute[0]]);
-                    const endTime = utils.getTimestamp(temp[property[3]][events[6]] ? temp[property[3]][events[6]][attribute[0]] : temp[property[3]][events[3]][attribute[0]]);
-                    temp[property[5]] = "https://www.heavens-above.com/" + $("#ctl00_cph1_imgViewFinder").attr("src") //.replace("size=800", "size=1600");
-                    temp[property[6]] = data;
-                    temp[property[7]] = endTime - startTime;
-                    temp[property[8]] = 0;
-                    const id = utils.md5(Math.random().toString()); //temp[property[1]] + temp[property[7]];
-                    temp[property[9]] = id;
-                    fs.appendFile(basedir + id + ".html", table.html(), (err) => {
+					const startTime = utils.getTimestamp(temp[property[3]][events[5]] ? temp[property[3]][events[5]][attribute[0]] : temp[property[3]][events[1]][attribute[0]]);
+					const endTime = utils.getTimestamp(temp[property[3]][events[6]] ? temp[property[3]][events[6]][attribute[0]] : temp[property[3]][events[3]][attribute[0]]);
+					temp[property[5]] = "https://www.heavens-above.com/" + $("#ctl00_cph1_imgViewFinder").attr("src"); //.replace("size=800", "size=1600");
+					temp[property[6]] = data;
+					temp[property[7]] = endTime - startTime;
+					temp[property[8]] = 0;
+					const id = utils.md5(Math.random().toString()); //temp[property[1]] + temp[property[7]];
+					temp[property[9]] = id;
+					fs.appendFile(basedir + id + ".html", table.html(), (err) => {
 						if (err) console.log(err);
 					}); //保存表格
-                    request.get(utils.image_options(temp[property[5]])).pipe(fs.createWriteStream(basedir + id + ".png", {
+					request.get(utils.image_options(temp[property[5]])).pipe(fs.createWriteStream(basedir + id + ".png", {
 						"flags": "a"
 					})).on("error", (err) => {
 						console.error(err);
 					}); //下载图片
-                    resolve(temp);
-                });
+					resolve(temp);
+				});
 			});
 		}
 		Promise.allSettled(queue.map(temp => factory(temp))).then(results => {
@@ -125,7 +125,7 @@ function getTable(config) {
 				else next += `&${$(o).attr("name")}=${$(o).attr("value")}`;
 			});
 			next += "&ctl00$cph1$visible=radioVisible";
-			next = next.replace(/\+/g, "%2B").replace(/\//g, "%2F") //.replace(/\$/g, "%24");
+			next = next.replace(/\+/g, "%2B").replace(/\//g, "%2F"); //.replace(/\$/g, "%24");
 			if (counter++ < config.pages) {
 				getTable({
 					target: config.target,
