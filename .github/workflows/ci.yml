@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout Repository
+      - name: Checkout code
+        uses: actions/checkout@v4 # 'uses:' is correct here
+      
+      # Step 2: Setup Node.js
+      # You MUST add this step to use npm commands
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # You can change this to 18, etc.
+          cache: 'npm' # Speeds up future builds
+
+      # Step 3: Install dependencies
+      # You MUST run install before you can test or lint
+      - name: Install dependencies
+        run: npm install # 'run:' is correct for commands
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test # 'run:' is correct here
+
+      # Step 5: Run lint
+      - name: Run lint
+        run: npm run lint # 'run:' is correct here
