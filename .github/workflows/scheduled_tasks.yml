@@ -1,0 +1,42 @@
+name: Scheduled Tasks
+
+on:
+    schedule:
+        - cron: '0 0 * * *'
+    workflow_dispatch:
+    
+jobs:
+    save_data:
+        name: Save Data
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout repo
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+
+            # Setup NodeJS
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+                cache: 'npm'
+            
+            # Install dependencies
+            - name: Install dependencies
+              run: npm install
+
+            # Run scraper to generate data
+            - name: Run scraper to generate data
+              run: node run.js
+
+            - name: Upload 'public' folder as an artifact
+              uses: actions/upload-artifact@v4
+              with:
+                # name of the .zip file you download
+                name: heavens-above-data-backup
+                # path to the folder to backup
+                path: public/data
+                    
+
+
