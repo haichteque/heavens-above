@@ -1,0 +1,30 @@
+title: "Your Documentation"
+description: "Auto-generated documentation from markdown"
+baseurl: "/your-repo-name"  # Only if using project site (username.github.io/repo-name)
+url: "https://your-username.github.io"
+theme: jekyll-theme-cayman
+
+# Include all markdown files
+include:
+  - "*.md"
+  - "**/*.md"
+  - "docs/"
+
+# Exclude unnecessary files
+exclude:
+  - ".github/"
+  - "node_modules/"
+  - "vendor/"
+
+# Optional: Plugin configuration
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Optional: Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
