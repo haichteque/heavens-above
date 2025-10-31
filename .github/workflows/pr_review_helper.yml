@@ -1,0 +1,50 @@
+# This workflow posts a custom comment on new Pull Requests
+
+name: PR Review Helper
+
+on:
+  # This trigger runs the workflow ONLY when a Pull Request is opened
+  pull_request:
+    types: [opened]
+
+jobs:
+  # The one and only job
+  add-reminder-comment:
+    name: Post Reminder Comment
+    runs-on: ubuntu-latest
+
+    # Grant permissions for the script to write a comment
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Post scraping best-practice comment
+        # This action allows us to run a custom JavaScript snippet
+        # that can use the GitHub API
+        uses: actions/github-script@v7
+        with:
+          # The GITHUB_TOKEN is automatically created and supplied
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # This is our "custom script"
+          script: |
+            // This is the custom message our bot will post
+            const commentBody = `
+              Hello! Thanks for contributing. 🚀
+
+              **Gentle Reminder:** This project scrapes the live \`heavens-above.com\` website. Please double-check that your changes:
+
+              - [ ] Do not scrape more data or more frequently than absolutely necessary.
+              - [ ] Gracefully handle potential errors (like 404s, 503s, or network timeouts).
+              - [ ] Continue to use the respectful User-Agent and headers set in \`utils.js\`.
+
+              *This helps ensure the project remains stable and doesn't get blocked by the target site.*
+            `;
+
+            // This is the GitHub API call to post the comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: commentBody
+            });
