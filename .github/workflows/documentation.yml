@@ -48,7 +48,7 @@ jobs:
       
       - name: Upload artifact
         # This zips up the finished '_site' folder (which contains index.html)
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./_site
 
