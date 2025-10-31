@@ -7,8 +7,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'docs/**'  # Trigger if anything in 'docs/' changes
-      - '**.md'    # Also trigger if a root markdown file changes
+      - '**.md'    # Trigger if any markdown file changes
 
   # Allow manual runs from the "Actions" tab
   workflow_dispatch:
@@ -33,17 +32,16 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        # This zips up your 'docs' folder and makes it ready for deployment
+        # This zips up your 'public' folder and makes it ready for deployment
         uses: actions/upload-pages-artifact@v3
         with:
           # This is the folder that will become your website's root
           # --- IMPORTANT ---
-          # If your files are in the root, change this to '.'
-          # If they are in another folder, change this to './folder-name'
+          # We are now deploying the root folder, which contains your index.md
           path: '.'
 
   # This job takes the zipped folder and deploys it
-  deploy_doc:
+  deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     
@@ -60,3 +58,5 @@ jobs:
         id: deployment
         # This action grabs the artifact from the 'build' job and deploys it
         uses: actions/deploy-pages@v4
+
+
