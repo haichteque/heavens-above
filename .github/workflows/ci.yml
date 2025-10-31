@@ -19,7 +19,7 @@ jobs:
       # Step 2: Setup Node.js
       # You MUST add this step to use npm commands
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20 # You can change this to 18, etc.
           cache: 'npm' # Speeds up future builds
