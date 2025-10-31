@@ -13,7 +13,7 @@ jobs:
         steps:
             # Checkout repo
             - name: Checkout Repo
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             # Setup NodeJS
             - name: Setup NodeJS
